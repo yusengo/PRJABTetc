@@ -2,11 +2,11 @@
 #include "DSP2833x_Examples.h"
 #include  <math.h>
 
- 
-#define pi 3.141593 // floatĞ¡Êıµãºó6Î»
-#define NL 256  // NLÎªºÏ³ÉĞÅºÅµãÊı£¬ÓëNµÄÖµ±ØĞëÊÇÒ»ÖÂµÄ£¬¼´NL=N
-    int N=NL;   //FFTµãÊı
-float Input[NL];//ÊäÈëµÄĞÅºÅĞòÁĞ
+ //å…¥ä¾µè€…
+#define pi 3.141593 // floatå°æ•°ç‚¹å6ä½
+#define NL 256  // NLä¸ºåˆæˆä¿¡å·ç‚¹æ•°ï¼Œä¸Nçš„å€¼å¿…é¡»æ˜¯ä¸€è‡´çš„ï¼Œå³NL=N
+    int N=NL;   //FFTç‚¹æ•°
+float Input[NL];//è¾“å…¥çš„ä¿¡å·åºåˆ—
 /*
 float h[33] = {
    0.000744808099883,0.0008898861356028,-0.002727390076489, 0.002920995444386,
@@ -38,19 +38,19 @@ float h[32]=
 };  */
 
 //Uint16  SampleTable[NL];
-struct Complex		// ¶¨Òå¸´Êı½á¹¹Ìå
+struct Complex		// å®šä¹‰å¤æ•°ç»“æ„ä½“
 {
    float real,imag;
 };
-struct Complex Wn;//¶¨ÒåĞı×ªÒò×Ó
-struct Complex Vn;//Ã¿Ò»¼¶µÚÒ»¸öĞı×ªÒò×ÓĞé²¿Îª0£¬Êµ²¿Îª1
-struct Complex T;//´æ·ÅĞı×ªÒò×ÓÓëX(k+B)µÄ³Ë»ı
+struct Complex Wn;//å®šä¹‰æ—‹è½¬å› å­
+struct Complex Vn;//æ¯ä¸€çº§ç¬¬ä¸€ä¸ªæ—‹è½¬å› å­è™šéƒ¨ä¸º0ï¼Œå®éƒ¨ä¸º1
+struct Complex T;//å­˜æ”¾æ—‹è½¬å› å­ä¸X(k+B)çš„ä¹˜ç§¯
 
-//float Realin[NL]={0};// ²ÉÑùÊäÈëµÄÊµÊı
-float output[NL]={0};// Êä³öµÄFFT·ùÖµ£¨¸´ÊıµÄÄ££©
-struct Complex Sample[NL];// ²ÉÑùÊäÈëµÄÊµÊı×ª»¯Îª¸´Êı
+//float Realin[NL]={0};// é‡‡æ ·è¾“å…¥çš„å®æ•°
+float output[NL]={0};// è¾“å‡ºçš„FFTå¹…å€¼ï¼ˆå¤æ•°çš„æ¨¡ï¼‰
+struct Complex Sample[NL];// é‡‡æ ·è¾“å…¥çš„å®æ•°è½¬åŒ–ä¸ºå¤æ•°
 
-struct Complex MUL(struct Complex a,struct Complex b)//¶¨Òå¸´³Ë
+struct Complex MUL(struct Complex a,struct Complex b)//å®šä¹‰å¤ä¹˜
 {
    struct Complex c;
    c.real=a.real*b.real-a.imag*b.imag;
@@ -58,17 +58,17 @@ struct Complex MUL(struct Complex a,struct Complex b)//¶¨Òå¸´³Ë
    return(c);
 }
 
-void MYFFT(struct Complex *xin,int N)//ÊäÈëÎª¸´ÊıÖ¸Õë*xin£¬×öNµãFFT
+void MYFFT(struct Complex *xin,int N)//è¾“å…¥ä¸ºå¤æ•°æŒ‡é’ˆ*xinï¼ŒåšNç‚¹FFT
 {
-   int L=0; // ¼¶¼äÔËËã²ã
-   int J=0; // ¼¶ÄÚÔËËã²ã
-   int K=0,KB=0; // µûĞÎÔËËã²ã
+   int L=0; // çº§é—´è¿ç®—å±‚
+   int J=0; // çº§å†…è¿ç®—å±‚
+   int K=0,KB=0; // è¶å½¢è¿ç®—å±‚
    int M=1,Nn=0;// N=2^M
-   float B=0; // µûĞÎÔËËãÁ½ÊäÈëÊı¾İ¼ä¸ô
-   /* ÒÔÏÂÊÇÎªµ¹ĞòĞÂ½¨µÄ¾Ö²¿±äÁ¿*/
+   float B=0; // è¶å½¢è¿ç®—ä¸¤è¾“å…¥æ•°æ®é—´éš”
+   /* ä»¥ä¸‹æ˜¯ä¸ºå€’åºæ–°å»ºçš„å±€éƒ¨å˜é‡*/
    int LH=0,J2=0,N1=0,I,K2=0;
    struct Complex T;
-   /*ÒÔÏÂÊÇµ¹Ğò*/
+   /*ä»¥ä¸‹æ˜¯å€’åº*/
    LH=N/2; // LH=N/2
    J2=LH;
    N1=N-2;
@@ -88,44 +88,44 @@ void MYFFT(struct Complex *xin,int N)//ÊäÈëÎª¸´ÊıÖ¸Õë*xin£¬×öNµãFFT
 	  }
 	  J2+=K2;
     }	    
-   /* ÒÔÏÂÎª¼ÆËã³öM */
+   /* ä»¥ä¸‹ä¸ºè®¡ç®—å‡ºM */
    Nn=N;
-   while(Nn!=2)// ¼ÆËã³öNµÄÒÔ2Îªµ×ÊıµÄÃİM
+   while(Nn!=2)// è®¡ç®—å‡ºNçš„ä»¥2ä¸ºåº•æ•°çš„å¹‚M
    {
      M++;
 	 Nn=Nn/2;
    }
 
-   /* µûĞÎÔËËã */
-   for(L=1;L<=M;L++)  // ¼¶¼ä
+   /* è¶å½¢è¿ç®— */
+   for(L=1;L<=M;L++)  // çº§é—´
 	{
 	  B=pow(2,(L-1));
       Vn.real=1;
 	  Vn.imag=0;
       Wn.real=cos(pi/B);
       Wn.imag=-sin(pi/B);
-	  for(J=0;J<B;J++)   // ¼¶ÄÚ
+	  for(J=0;J<B;J++)   // çº§å†…
 	   {        
-		 for(K=J;K<N;K+=2*B)  // µûĞÎÒò×ÓÔËËã
+		 for(K=J;K<N;K+=2*B)  // è¶å½¢å› å­è¿ç®—
 		  {
             KB=K+B;
             T=MUL(xin[KB],Vn);
-            xin[KB].real=xin[K].real-T.real;//Ô­Ö·ÔËËã£¬¼ÆËã½á¹û´æ·ÅÔÚÔ­À´µÄÊı×éÖĞ
+            xin[KB].real=xin[K].real-T.real;//åŸå€è¿ç®—ï¼Œè®¡ç®—ç»“æœå­˜æ”¾åœ¨åŸæ¥çš„æ•°ç»„ä¸­
             xin[KB].imag=xin[K].imag-T.imag;
              xin[K].real=xin[K].real+T.real;
              xin[K].imag=xin[K].imag+T.imag;      
 		  }
-		  Vn=MUL(Wn,Vn);// Ğı×ªÒò×Ó×ö¸´³ËÏàµ±ÓÚÖ¸ÊıÏà¼Ó£¬µÃµ½µÄ½á¹û
-		  // ºÍJ*2^£¨M-L£©ÊÇÒ»ÑùµÄ£¬ÒòÎªÔÚµûĞÎÒò×ÓÔËËã
-		 // ²ãÖĞMÓëL¶¼ÊÇ²»±äµÄ£¬Î¨Ò»±äx»¯µÄÊÇ¼¶ÄÚµÄJ
-		 // ¶øÇÒJÊÇÒÔ1Îª²½³¤µÄ£¬ÈçJ*WµÈĞ§ÓÚW+W+W...J¸öWÏà¼Ó
+		  Vn=MUL(Wn,Vn);// æ—‹è½¬å› å­åšå¤ä¹˜ç›¸å½“äºæŒ‡æ•°ç›¸åŠ ï¼Œå¾—åˆ°çš„ç»“æœ
+		  // å’ŒJ*2^ï¼ˆM-Lï¼‰æ˜¯ä¸€æ ·çš„ï¼Œå› ä¸ºåœ¨è¶å½¢å› å­è¿ç®—
+		 // å±‚ä¸­Mä¸Léƒ½æ˜¯ä¸å˜çš„ï¼Œå”¯ä¸€å˜xåŒ–çš„æ˜¯çº§å†…çš„J
+		 // è€Œä¸”Jæ˜¯ä»¥1ä¸ºæ­¥é•¿çš„ï¼Œå¦‚J*Wç­‰æ•ˆäºW+W+W...Jä¸ªWç›¸åŠ 
 		}
 	 }
 }
 
 
 /*
-void FilterDC(struct Complex *ADC,int N)//È¥³ıÊı¾İÖĞµÄÖ±Á÷³É·Ö£¬·ñÔòÖ±Á÷·ÖÁ¿½«ºÜ´ó
+void FilterDC(struct Complex *ADC,int N)//å»é™¤æ•°æ®ä¸­çš„ç›´æµæˆåˆ†ï¼Œå¦åˆ™ç›´æµåˆ†é‡å°†å¾ˆå¤§
 {
    int i;
    float sum=0;
@@ -137,10 +137,10 @@ void FilterDC(struct Complex *ADC,int N)//È¥³ıÊı¾İÖĞµÄÖ±Á÷³É·Ö£¬·ñÔòÖ±Á÷·ÖÁ¿½«ºÜ
 }*/
 
 /********************************
-¹¦ÄÜ£º¼ÆËã¸´ÊıµÄÄ£
-ĞÎ²Î£º*SampleÖ¸ÏòĞèÒªÈ¡Ä£µÄ¸´Êı½á¹¹Ìå
-      NÎªÈ¡Ä£µãÊı
-	  *output´æ·ÅÈ¡Ä£ºóÊıÖµµÄÊı×é
+åŠŸèƒ½ï¼šè®¡ç®—å¤æ•°çš„æ¨¡
+å½¢å‚ï¼š*SampleæŒ‡å‘éœ€è¦å–æ¨¡çš„å¤æ•°ç»“æ„ä½“
+      Nä¸ºå–æ¨¡ç‚¹æ•°
+	  *outputå­˜æ”¾å–æ¨¡åæ•°å€¼çš„æ•°ç»„
 *********************************/
 void ModelComplex(struct Complex *Sample,int N,float *output)
 {
@@ -162,18 +162,18 @@ void main(void)
    InitPieCtrl();
    IER = 0x0000;
    IFR = 0x0000;
-    for(i=0;i<NL;i++) //²úÉúÒ»¸öÈı´ÎĞ³²¨µş¼Ó¶ø³ÉµÄ·½²¨
+    for(i=0;i<NL;i++) //äº§ç”Ÿä¸€ä¸ªä¸‰æ¬¡è°æ³¢å åŠ è€Œæˆçš„æ–¹æ³¢
      { 
       Input[i]=sin(2*pi*5*i/(NL-1))+sin(2*pi*i*5*3/(NL-1))/3+sin(2*pi*i*5*5/(NL-1))/5;
 	 }
-	 for(i=0;i<NL;i++)   //ÊäÈëÊµÊıĞÅºÅ×ª»»Îª¸´Êı
+	 for(i=0;i<NL;i++)   //è¾“å…¥å®æ•°ä¿¡å·è½¬æ¢ä¸ºå¤æ•°
 	  {
          Sample[i].real=Input[i];
 		//  Sample[i].real=h[i];
 		 Sample[i].imag=0;
 	  }
 	 MYFFT(Sample,NL);                //FFT
-     ModelComplex(Sample,NL,output);  //ÇóÄ£
+     ModelComplex(Sample,NL,output);  //æ±‚æ¨¡
 	while(1)
    {       
    //  FilterDC(Sample,NL);
